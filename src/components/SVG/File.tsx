@@ -1,4 +1,4 @@
-function fileIcon() {
+function FileIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,4 +14,4 @@ function fileIcon() {
   );
 }
 
-export default fileIcon;
+export default FileIcon;
