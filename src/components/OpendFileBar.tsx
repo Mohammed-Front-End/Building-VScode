@@ -1,20 +1,33 @@
 import { useSelector } from "react-redux";
 import { RootState } from "@reduxjs/toolkit/query";
 import OpendFilesBarTab from "./OpendFilesBarTab";
-import FileSyntaxHighlighter from "./FileSyntaxHighlighter";
+import DropMenu from "./ui/ContextMenue";
+import { useState } from "react";
 
 function OpendFilesBar() {
-  const { openedFiles, clickedFile } = useSelector(
-    (state: RootState) => state.tree
-  );
+  const { openedFiles } = useSelector((state: RootState) => state.tree);
+  const [showMenu, setShowMenu] = useState(false);
+  const [menuPosition, setMenuPosition] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+
   return (
     <div>
-      <div className="flex items-center border-b-[1px] border-[#fffff1f]">
+      <div
+        className="flex items-center border-b-[1px] border-[#fffff1f]"
+        onContextMenu={(e) => {
+          e.preventDefault();
+          setMenuPosition({ x: e.clientX, y: e.clientY });
+          setShowMenu(true);
+        }}
+      >
         {openedFiles.map((file) => (
           <OpendFilesBarTab file={file} key={file.id} />
         ))}
       </div>
-      <FileSyntaxHighlighter content={clickedFile.fileContent}/>
+
+      {showMenu && <DropMenu position={menuPosition} setShowMenu={setShowMenu}/>}
     </div>
   );
 }

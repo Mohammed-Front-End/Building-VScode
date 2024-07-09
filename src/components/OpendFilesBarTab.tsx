@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { IFile } from "../interfaces";
 import RenderFileIcon from "./RenderFileIcon";
-import { setClickedFile, setOpenedFiles } from "../app/features/fileTreeSlice";
+import { setClickedFile, setOpenedFiles, setTabIdToRemove } from "../app/features/fileTreeSlice";
 import CloseIcon from "./SVG/CloseIcon";
 import { RootState } from "@reduxjs/toolkit/query";
+// import { useState } from "react";
 
 interface IProps {
   file: IFile;
@@ -14,6 +15,7 @@ function OpendFilesBarTab({ file }: IProps) {
     openedFiles,
     clickedFile: { activeTabId },
   } = useSelector((state: RootState) => state.tree);
+
 
   // Handlers
   const onClick = () => {
@@ -50,15 +52,26 @@ function OpendFilesBarTab({ file }: IProps) {
 
   return (
     <div
+
       onClick={onClick}
-      className="  p-2 flex items-center"
+      className="max-w-screen-md border-t-2 p-2 flex items-center"
       style={{
         borderTop:
           file.id === activeTabId
             ? "2px solid #cf6ccf"
             : "2px solid transparent",
       }}
+
+      onContextMenu={e=> {
+        e.preventDefault()
+        dispatch(setTabIdToRemove(file.id))
+      }}
+      // data-id={file.id}
     >
+
+
+
+
       <RenderFileIcon filename={file.name} />
       <span
         className="cursor-pointer hover:bg-[#64646473] 
@@ -77,6 +90,7 @@ function OpendFilesBarTab({ file }: IProps) {
       >
         <CloseIcon />
       </span>
+
     </div>
   );
 }
